@@ -29,47 +29,48 @@
             });
             return;
         }
-
-        MFMessageComposeViewController *composeViewController = [[MFMessageComposeViewController alloc] init];
-        composeViewController.messageComposeDelegate = self;
-
-        NSString* body = [command.arguments objectAtIndex:1];
-        if (body != nil) {
-            BOOL replaceLineBreaks = [[command.arguments objectAtIndex:3] boolValue];
-            if (replaceLineBreaks) {
-                body = [body stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
-            }
-            [composeViewController setBody:body];
-        }
-
-        NSMutableArray* recipients = [command.arguments objectAtIndex:0];
-        if (recipients != nil) {
-            if ([recipients.firstObject isEqual: @""]) {
-                [recipients replaceObjectAtIndex:0 withObject:@"?"];
-            }
-            
-            [composeViewController setRecipients:recipients];
-        }
-
-        NSString *imageStr = [command.arguments objectAtIndex:2];
-        if (imageStr != nil) {
-            UIImage *image = [UIImage imageWithData:[NSData dataFromBase64String:imageStr]];
-
-            if (image != nil) {
-                if([MFMessageComposeViewController respondsToSelector:@selector(canSendAttachments)] && [MFMessageComposeViewController canSendAttachments])
-                {
-                    NSData* attachment = UIImageJPEGRepresentation(image, 1.0);
-                    
-                    NSString* uti = (NSString*)kUTTypeMessage;
-                    [composeViewController addAttachmentData:attachment typeIdentifier:uti filename:@"image.png"];
-                }
-                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-                pasteboard.persistent = YES;
-                pasteboard.image = image;
-            }
-        }
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+
+            MFMessageComposeViewController *composeViewController = [[MFMessageComposeViewController alloc] init];
+            composeViewController.messageComposeDelegate = self;
+
+            NSString* body = [command.arguments objectAtIndex:1];
+            if (body != nil) {
+                BOOL replaceLineBreaks = [[command.arguments objectAtIndex:3] boolValue];
+                if (replaceLineBreaks) {
+                    body = [body stringByReplacingOccurrencesOfString: @"\\n" withString: @"\n"];
+                }
+                [composeViewController setBody:body];
+            }
+
+            NSMutableArray* recipients = [command.arguments objectAtIndex:0];
+            if (recipients != nil) {
+                if ([recipients.firstObject isEqual: @""]) {
+                    [recipients replaceObjectAtIndex:0 withObject:@"?"];
+                }
+                
+                [composeViewController setRecipients:recipients];
+            }
+
+            NSString *imageStr = [command.arguments objectAtIndex:2];
+            if (imageStr != nil) {
+                UIImage *image = [UIImage imageWithData:[NSData dataFromBase64String:imageStr]];
+
+                if (image != nil) {
+                    if([MFMessageComposeViewController respondsToSelector:@selector(canSendAttachments)] && [MFMessageComposeViewController canSendAttachments])
+                    {
+                        NSData* attachment = UIImageJPEGRepresentation(image, 1.0);
+                        
+                        NSString* uti = (NSString*)kUTTypeMessage;
+                        [composeViewController addAttachmentData:attachment typeIdentifier:uti filename:@"image.png"];
+                    }
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    pasteboard.persistent = YES;
+                    pasteboard.image = image;
+                }
+            }
+        
             [self.viewController presentViewController:composeViewController animated:YES completion:nil];
         });
     }];
