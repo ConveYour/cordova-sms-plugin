@@ -61,7 +61,7 @@ public class Sms extends CordovaPlugin {
                 try {
                     isIntent = args.getString(3).equalsIgnoreCase("INTENT");
                     if( isIntent ){
-                        Log.i("MCR", "using intent");
+                        Log.i("cordova-sms-plugin", "using intent");
                     }
                 } catch (NullPointerException npe) {
                     // It might throw a NPE, but it doesn't matter.
