@@ -1,3 +1,8 @@
+# About this Fork by ConveYour
+
+- Added support for MMS
+- NO LONGER USING SEND_SMS PERMISSION at all in this plugin because of the major restrictions on this capability by the Google Play store. All SMS messages are just using an sms share intent. 
+
 # Cordova SMS Plugin
 
 Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for **Android**, **iOS**, **Windows Phone 8** and **Windows 10 Universal**.

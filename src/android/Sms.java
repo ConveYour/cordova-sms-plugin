@@ -31,6 +31,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import android.util.Log;
 
 public class Sms extends CordovaPlugin {
 
@@ -58,7 +59,10 @@ public class Sms extends CordovaPlugin {
             case ACTION_SEND_SMS:
                 boolean isIntent = false;
                 try {
-                    isIntent = args.getString(2).equalsIgnoreCase("INTENT");
+                    isIntent = args.getString(3).equalsIgnoreCase("INTENT");
+                    if( isIntent ){
+                        Log.i("MCR", "using intent");
+                    }
                 } catch (NullPointerException npe) {
                     // It might throw a NPE, but it doesn't matter.
                 }
